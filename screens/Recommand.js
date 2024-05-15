@@ -13,22 +13,35 @@ function Recommand() {
 
   const [posts, setPosts] = useState([]);
  
-  // http://${LOCAL}:8080/api/images/get
+  
   const fetchPosts = async () => {
     try {
       const response = await axios.get(`http://${MY_IP_ADDRESS}:8080/api/images/get`);
-      setPosts(response.data);
+      
+      const formattedPosts = response.data.map(post => {
+        let decodedImageUrl = decodeURIComponent(post.imageUrl);
+        // console.log('Recommand.js Console : ImageUrl :' ,post.imageUrl);
+        // 잘못된 URL 부분 수정
+        decodedImageUrl = decodedImageUrl.replace(/https:\/\/laby-bucket\.s3\.ap-northeast-2\.amazonaws\.com\/https%3A\//, 'https://');
+        return { ...post, imageUrl: decodedImageUrl };
+      });
+      setPosts(formattedPosts);
+  
     } catch (error) {
       console.error('Failed to fetch posts:', error);
     }
   };
+  
+ 
+  
+  
   useFocusEffect(
     useCallback(() => {
       fetchPosts();
     }, [])
   );
 
-  // console.log("Get Data Success",posts);
+  
   
   return (
     <SafeAreaView style={styles.container}>
@@ -79,7 +92,7 @@ function Recommand() {
         <View style={styles.postContainer}>
           {posts.map((post, index) => (
             <View key={index} style={styles.postItem}>
-              <ImageClickable postUrl={post.imageUri} postInfo={post}/>
+              <ImageClickable postUrl={post.imageUrl} postInfo={post}/>
             </View>
           ))}
         </View>

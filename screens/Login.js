@@ -26,7 +26,7 @@ function Login(props) {
                 email: email,
                 password: password
             });
-            console.log(response.data);
+            // console.log(response.data);
             const UserData = response.data;
             if(UserData && UserData.email === email && UserData.password === password){ 
             // 로그인 성공시 처리
@@ -34,7 +34,7 @@ function Login(props) {
             await AsyncStorage.setItem('email', email); // 서버에서 반환된 토큰을 저장
             await AsyncStorage.setItem('UserData',JSON.stringify(UserData));
             await AsyncStorage.setItem('likerId', email);
-            console.log(email);
+            // console.log(email);
             // console.log(UserData);
             navigation.navigate("Overview");
             }else {

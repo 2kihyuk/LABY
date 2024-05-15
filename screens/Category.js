@@ -14,7 +14,7 @@ const imageWidth = (windowWidth - 30) / 2; // 한 줄에 두 개의 이미지가
 
 function Category({ route }) {
   const { category } = route.params;
-  console.log(category);
+  // console.log(category);
   const [posts, setPosts] = useState([]);
   const navigation = useNavigation();
 
@@ -55,7 +55,7 @@ function Category({ route }) {
       <View style={styles.item}>
         <Image
           style={styles.image}
-          source={{ uri: item.imageUri }}
+          source={{ uri: item.imageUrl }}
           resizeMode="cover"
         />
       </View>

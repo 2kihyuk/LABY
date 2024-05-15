@@ -103,7 +103,7 @@ export default function Upload() {
       formData.append('creatorheight', UserDataParsed.height);//업로드하는 사람의 키
       formData.append('creatorweight', UserDataParsed.weight);//업로드하는 사람의 몸무게
       formData.append('creatorImage', creator.image); // Ensure this is a string URL , 업로드하는 사람의 프로필 이미지
-      // formData.append('imageUri', compressedImage.uri);  //업로드하는 사진
+     
       formData.append('imageUri', {
         uri: compressedImage.uri,
         type: 'image/jpeg',
@@ -111,7 +111,7 @@ export default function Upload() {
       });
       
       formData.append('lookTags', JSON.stringify(lookTags)); //업로드하는 게시물의 의류정보태그
-      formData.append('styleTag', JSON.stringify(styleTag)); // 업로드하는 게시물의 스타일 태그
+      // formData.append('styleTag', JSON.stringify(styleTag)); // 업로드하는 게시물의 스타일 태그
       formData.append('text', text);//업로드하는 게시물의 텍스트
       formData.append('gender',gender);
       formData.append('season',season);
@@ -165,7 +165,7 @@ export default function Upload() {
   const handleSaveStyleTag = (styleTagData) => {
     setStyleTag(styleTagData);
     toggleModal2();
-    console.log('StyleTag:', styleTagData);
+    // console.log('StyleTag:', styleTagData);
   };
 
   return (

@@ -18,9 +18,10 @@ const Post = ({ route }) => {
   const [currentTag, setCurrentTag] = useState({ brand: '', price: '', size: '' });
   const [currentStyleTag,setCurrentStyleTag] =useState({ gender: '' , season: '' , mood: '', category:''});
   const [heartVisible, setHeartVisible] = useState(false);
-  const heartOpacity = useRef(new Animated.Value(0)).current;
+  const heartOpacity = useRef(new Animated.Value(0)).current; 
 
-  console.log("likerId:" , likerId);
+  console.log('Post.js Console : CreatorInfo Data : ', creatorInfo);
+
 
   useEffect(() => {
     const fetchLikerId = async () => {
@@ -31,7 +32,7 @@ const Post = ({ route }) => {
     fetchLikerId();
   }, []);
 
-console.log(creatorInfo);
+
 useEffect(() => {
     if (creatorInfo && creatorInfo.lookTags) {
       try {
@@ -45,13 +46,41 @@ useEffect(() => {
     }
   }, [creatorInfo]);
 
+  // useEffect(() => {
+  //   if (creatorInfo && creatorInfo.styleTags) {
+  //     try {
+  //       const styleTags = JSON.parse(creatorInfo.styleTags); // JSON 문자열 파싱
+  //       setCurrentStyleTag(styleTags); // 파싱된 객체 저장
+  //     } catch (error) {
+  //       console.error('Failed to parse style tags:', error);
+  //     }
+  //   }
+  // }, [creatorInfo]);
+  // useEffect(() => {
+  //   if (creatorInfo && creatorInfo.styleTags) {
+  //     try {
+  //       console.log("Parsing styleTags:", creatorInfo.styleTags);  // 데이터 확인
+  //       const styleTags = JSON.parse(creatorInfo.styleTags);
+  //       setCurrentStyleTag(styleTags);  // 파싱된 객체 저장
+  //     } catch (error) {
+  //       console.error('Failed to parse style tags:', error);
+  //     }
+  //   }
+  // }, [creatorInfo]);
   useEffect(() => {
     if (creatorInfo && creatorInfo.styleTags) {
       try {
-        const styleTags = JSON.parse(creatorInfo.styleTags); // JSON 문자열 파싱
-        setCurrentStyleTag(styleTags); // 파싱된 객체 저장
+        if (typeof creatorInfo.styleTags === "string" && creatorInfo.styleTags.startsWith('{')) {
+          const styleTags = JSON.parse(creatorInfo.styleTags);
+          setCurrentStyleTag(styleTags);
+        } else {
+          console.log("Received non-JSON styleTags:", creatorInfo.styleTags);
+          // Handle cases where styleTags is not in JSON format
+          // For instance, setting a default or error handling
+        }
       } catch (error) {
-        console.error('Failed to parse style tags:', error);
+        // console.error('Failed to parse style tags. Data received:', creatorInfo.styleTags);
+        console.error('Error details:', error);
       }
     }
   }, [creatorInfo]);
@@ -77,7 +106,7 @@ useEffect(() => {
     }
   }, [heartVisible]);
 
-  console.log("postUser:" , creatorInfo.creatorEmail);
+ 
   // const handleHeartClick = async () => {
   //   setHeartFilled(!heartFilled);
     
@@ -244,8 +273,7 @@ useEffect(() => {
       setTapCount(1);
     }
   }
-  console.log("creatorInfo.category : ", creatorInfo.category);
-  console.log("creatorInfo.gender : ", creatorInfo.gender);
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
       <View style={styles.profile}>
@@ -259,7 +287,7 @@ useEffect(() => {
         </TouchableOpacity>
       </View>
       <TouchableWithoutFeedback onPress={handleDoubleTap}>
-        <Image source={{ uri: creatorInfo.imageUri }} style={styles.image} />
+        <Image source={{ uri: creatorInfo.imageUrl }} style={styles.image} />
       </TouchableWithoutFeedback>
       {showTag && (
         <View style={styles.tagBox}>
@@ -296,7 +324,7 @@ useEffect(() => {
       <View style={styles.stTag}>
         <Text style={{ color: '#bcbcbc', fontWeight: 'bold' }}>착용 제품</Text></View>
       {currentTag && (
-        <PdTag tag={currentTag} image={creatorInfo.imageUri} />)}
+        <PdTag tag={currentTag} image={creatorInfo.imageUrl} />)}
       <View style={styles.stTag}>
         <Text style={{ color: '#bcbcbc', fontWeight: 'bold' }}>연관 태그</Text>
         <StTag gender={creatorInfo.gender} season={creatorInfo.season} mood={creatorInfo.mood} category={currentStyleTag.category} />

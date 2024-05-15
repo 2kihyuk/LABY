@@ -31,7 +31,7 @@ function MY(){
         try {
             const email = await AsyncStorage.getItem('email');
             if (email) {
-                console.log('User email:', userEmail);
+                
                 const response = await axios.get(`http://${MY_IP_ADDRESS}:8080/api/images/uploads/${email}`);
                 if (response.data) {
                     setPosts(response.data);
@@ -57,6 +57,7 @@ function MY(){
         const fetchData = async () => {
             try {
                 const response = await axios.get(`http://${MY_IP_ADDRESS}:8080/profile`);
+                console.log('My.js Console : Check Data : ', response.data);
                 setNickname(response.data.nickname);
                 setHeight(response.data.height);
                 setWeight(response.data.weight);
@@ -67,7 +68,7 @@ function MY(){
         };
 
         fetchData();
-    }, [nickname,height,weight]);
+    }, [nickname,height,weight]);   
     
 
 
@@ -87,7 +88,7 @@ function MY(){
     >
       <Image
         style={styles.postImage}
-        source={{ uri: item.imageUri }}
+        source={{ uri: item.imageUrl }}
         resizeMode={'cover'}
       />
     </TouchableOpacity>
