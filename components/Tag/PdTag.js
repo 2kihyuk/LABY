@@ -1,7 +1,7 @@
 
 
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity ,Linking } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import Colors from '../../constants/color';
 
@@ -23,7 +23,7 @@ const PdTag = ({ tags, image }) => {
   };
 
   return (
-    
+
     <View>
       {tags.map((tag, index) => (
         <TouchableOpacity key={index} onPress={() => handlePress(tag.purchaseLocation)} style={styles.pdContainer}>
@@ -40,13 +40,6 @@ const PdTag = ({ tags, image }) => {
               <Text style={{ color: '#378aff', fontSize: 14, marginLeft: 2, fontWeight: 'bold' }}>{tag.size}사이즈</Text>
             </View>
           </View>
-          <TouchableOpacity onPress={() => handleMarkClick(index)} style={styles.iconContainer}>
-            {markedTags[index] ? (
-              <FontAwesome name="bookmark" size={22} color="#ffd728" />
-            ) : (
-              <FontAwesome name="bookmark-o" size={22} color="black" />
-            )}
-          </TouchableOpacity>
         </TouchableOpacity>
       ))}
     </View>

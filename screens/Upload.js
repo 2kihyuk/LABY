@@ -359,12 +359,6 @@ export default function Upload() {
 
   // console.log("Test UserDataParsed",UserDataParsed.email);
 
-
-  const creator = {
-    name: 'Sang_S',
-    image: 'https://images.onthelook.co.kr/user-profile/20240303090353932840360.jpeg?w=192&q=60&f=webp',
-  };
-
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -477,7 +471,11 @@ export default function Upload() {
       <ScrollView>
         <View style={styles.creatorContainer}>
           <Image
-            source={{ uri: UserDataParsed.profileImageUrl }}
+            source={
+              UserDataParsed.profileImageUrl
+                ? { uri: UserDataParsed.profileImageUrl }
+                : require('../assets/profile.png')
+            }
             resizeMode="contain"
             style={styles.creatorImage}
           />
