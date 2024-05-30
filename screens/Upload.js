@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, Button, Image, View, StyleSheet, ScrollView, TextInput, Text, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -33,6 +33,7 @@ export default function Upload() {
     const getUserData = async () => {
       try {
         const userData = await AsyncStorage.getItem('UserData');
+        console.log(userData);
         if (userData !== null) {
           setUserDataParsed(JSON.parse(userData));
         } else {
@@ -44,17 +45,10 @@ export default function Upload() {
         Alert.alert('사용자 정보 로딩 중 오류 발생');
       }
     };
-  
     getUserData();
   }, []);
 
   // console.log("Test UserDataParsed",UserDataParsed.email);
-
-
-  const creator = {
-    name: 'Sang_S',
-    image: 'https://images.onthelook.co.kr/user-profile/20240303090353932840360.jpeg?w=192&q=60&f=webp',
-  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -77,17 +71,14 @@ export default function Upload() {
         Alert.alert('이미지를 선택해주세요.');
         return;
       }
-      
       if (Object.keys(styleTag).length === 0) {
         Alert.alert('스타일 태그를 선택해주세요.');
         return;
       }
-      
       if (lookTags.length === 0) {
         Alert.alert('의류 태그를 선택해주세요.');
         return;
       }
-  
       // 이미지를 압축하여 저장
       const compressedImage = await ImageManipulator.manipulateAsync(
         image,
@@ -96,45 +87,43 @@ export default function Upload() {
       );
 
       const { gender, season, mood, category } = styleTag;
-  
       const formData = new FormData();
-      formData.append('creatorEmail',UserDataParsed.email); //업로드하는 사람의 이메일
+      formData.append('creatorEmail', UserDataParsed.email); //업로드하는 사람의 이메일
       formData.append('creatorName', UserDataParsed.nickname);//업로드하는 사람의 닉네임
       formData.append('creatorheight', UserDataParsed.height);//업로드하는 사람의 키
       formData.append('creatorweight', UserDataParsed.weight);//업로드하는 사람의 몸무게
-      formData.append('creatorImage', creator.image); // Ensure this is a string URL , 업로드하는 사람의 프로필 이미지
-     
+      formData.append('creatorImage', UserDataParsed.profileImageUrl); // Ensure this is a string URL , 업로드하는 사람의 프로필 이미지
       formData.append('imageUri', {
         uri: compressedImage.uri,
         type: 'image/jpeg',
         name: 'upload.jpg'
       });
-      
+
       formData.append('lookTags', JSON.stringify(lookTags)); //업로드하는 게시물의 의류정보태그
       // formData.append('styleTag', JSON.stringify(styleTag)); // 업로드하는 게시물의 스타일 태그
       formData.append('text', text);//업로드하는 게시물의 텍스트
-      formData.append('gender',gender);
-      formData.append('season',season);
-      formData.append('mood',mood);
-      formData.append('category',category);
-      
-      
+      formData.append('gender', gender);
+      formData.append('season', season);
+      formData.append('mood', mood);
+      formData.append('category', category);
+
+
       // http://${LOCAL}:8080/api/images/upload
       const response = await axios.post(`http://${MY_IP_ADDRESS}:8080/api/images/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      
 
-  
-      if (response.status === 200,201) {
+
+
+      if (response.status === 200, 201) {
         Alert.alert('업로드 성공!');
         console.log(response.status);
         // console.log("test Email 1",UserDataParsed.email);
-        
 
-        addImage(UserDataParsed.nickname, creator.image, image, lookTags, gender,season,mood,category, text, UserDataParsed.height,UserDataParsed.weight);
+
+        addImage(UserDataParsed.nickname, UserDataParsed.profileImageUrl, image, lookTags, gender, season, mood, category, text, UserDataParsed.height, UserDataParsed.weight);
         navigation.goBack();
         // 업로드 후 작업...
       } else {
@@ -143,7 +132,6 @@ export default function Upload() {
       }
     } catch (error) {
       console.error('업로드 에러:', error);
-      
       console.log(response.status);
       Alert.alert('업로드 중 에러 발생!');
     }
@@ -154,9 +142,10 @@ export default function Upload() {
   };
 
   const handleSaveLookTag = (lookTagData) => {
-    setLookTags([...lookTags, lookTagData]);
+    setLookTags((prevLookTags) => [...prevLookTags, lookTagData]);
     toggleModal();
   };
+
 
   const toggleModal2 = () => {
     setIsModalVisible2(!isModalVisible2);
@@ -173,7 +162,11 @@ export default function Upload() {
       <ScrollView>
         <View style={styles.creatorContainer}>
           <Image
-            source={{ uri: creator.image }}
+            source={
+              UserDataParsed.profileImageUrl
+                ? { uri: UserDataParsed.profileImageUrl }
+                : require('../assets/profile.png')
+            }
             resizeMode="contain"
             style={styles.creatorImage}
           />
@@ -194,11 +187,12 @@ export default function Upload() {
             <Text style={styles.tagFont} onPress={toggleModal}>#의류 태그</Text>
           </>)}
         </View>
-        {lookTags.map((tag, index) => (
-          <View key={index}>
-            <PdTag tag={tag} image={image} />
-          </View>
-        ))}
+        <View style={styleTag.pdContainer}>
+          {lookTags.length > 0 && (
+            <PdTag tags={lookTags} image={image} />
+
+          )}
+        </View>
         <View style={styles.tagContainer}>
           {image && (
             <>
@@ -233,7 +227,7 @@ const styles = StyleSheet.create({
     width: 380,
     height: 420,
     backgroundColor: '#f3f3f3',
-    marginBottom: 20,
+    marginBottom: 10,
     alignItems: "center",
     justifyContent: 'center'
   },
@@ -241,7 +235,7 @@ const styles = StyleSheet.create({
     width: 380,
     height: 420,
     marginTop: 13,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   creatorContainer: {
     flexDirection: "row",
@@ -268,7 +262,7 @@ const styles = StyleSheet.create({
   tagContainer: {
     flexDirection: 'column',
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginTop: 10,
     marginHorizontal: 12
   },
   tagFont: {

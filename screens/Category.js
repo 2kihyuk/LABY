@@ -86,28 +86,31 @@ function Category({ route }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5, // 이미지 간의 간격을 조절합니다.
+    alignContent: 'center',
+    alignItems:'center',
+    justifyContent: 'center'
   },
   item: {
     width: imageWidth,
-    height: imageWidth, // 이미지를 정사각형으로 표시하기 위해 높이도 설정합니다.
-    margin: 5,
-    borderRadius: 5,
+    height: 240,
     overflow: 'hidden',
+    marginBottom: 3,
+    marginHorizontal: 2,
   },
   image: {
     width: '100%',
-    height: '100%', // 이미지가 정사각형으로 표시되도록 높이를 100%로 설정합니다.
+    height: 240,
   },
   header: {
     justifyContent: 'center',
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginVertical: 10,
   },
   maincontainer: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    flex: 1
   }
 })
 

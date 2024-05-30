@@ -2,8 +2,8 @@ import { View, Text, FlatList, Image, StyleSheet, Dimensions ,TouchableOpacity  
 import axios from 'axios';
 import { useState,useCallback,useEffect ,} from 'react';
 import { useFocusEffect,useNavigation } from '@react-navigation/native';
-import ImageClickable from '../components/ImageClickable';
 import { LOCAL, MY_IP_ADDRESS } from '../config';
+import React from 'react';
 
 const windowWidth = Dimensions.get('window').width;
 const imageWidth = (windowWidth - 30) / 2; // 한 줄에 두 개의 이미지가 있으므로 가로 여백을 제외하고 20을 더해서 나누어 줍니다.
@@ -12,29 +12,31 @@ const imageWidth = (windowWidth - 30) / 2; // 한 줄에 두 개의 이미지가
 
 function CategorySeason({ route }) {
   const { season } = route.params;
-  console.log(route.params);
-  console.log(season);
+  
   const [posts, setPosts] = useState([]);
   const navigation = useNavigation();
 
-  // http://${LOCAL}:8080/api/images/uploads/seasons/${season}
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(`http://${MY_IP_ADDRESS}:8080/api/images/uploads/seasons/${season}`);
-        setPosts(response.data);
-      } catch (error) {
-        console.error('Failed to fetch posts:', error);
-        
-      }
-    };
-
-    fetchPosts();
-  }, [season]);
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchPosts = async () => {
+        try {
+          const response = await axios.get(`http://${MY_IP_ADDRESS}:8080/api/images/uploads/seasons/${season}`);
+          setPosts(response.data);
+          console.log(response.data);  // Logging the fetched data for debugging.
+        } catch (error) {
+          console.error('Failed to fetch posts:', error);
+        }
+      };
+      
+      fetchPosts();
+      return () => {};  // Optional cleanup mechanism.
+    }, [season])
+  );
 
   const handleImageClick = (postInfo) => {
     navigation.navigate('Post', { creatorInfo: postInfo });
-    console.log(postInfo);
+    console.log(postInfo);  // Logging the clicked post info for debugging.
   };
 
   const renderItem = ({ item }) => (
@@ -42,7 +44,7 @@ function CategorySeason({ route }) {
       <View style={styles.item}>
         <Image
           style={styles.image}
-          source={{ uri: item.imageUri }}
+          source={{ uri: item.imageUrl }}  // Ensure the source is correctly set from item.
           resizeMode="cover"
         />
       </View>
@@ -67,28 +69,31 @@ function CategorySeason({ route }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5, // 이미지 간의 간격을 조절합니다.
+    alignContent: 'center',
+    alignItems:'center',
+    justifyContent: 'center'
   },
   item: {
     width: imageWidth,
-    height: imageWidth, // 이미지를 정사각형으로 표시하기 위해 높이도 설정합니다.
-    margin: 5,
-    borderRadius: 5,
+    height: 240,
     overflow: 'hidden',
+    marginBottom: 3,
+    marginHorizontal: 2,
   },
   image: {
     width: '100%',
-    height: '100%', // 이미지가 정사각형으로 표시되도록 높이를 100%로 설정합니다.
+    height: 240,
   },
   header: {
     justifyContent: 'center',
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginVertical: 10,
   },
   maincontainer: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    flex: 1
   }
 })
 

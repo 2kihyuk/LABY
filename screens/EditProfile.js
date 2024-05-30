@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'; // useRoute 추가
 import axios from 'axios';
 import { LOCAL } from '../config';
+import { useState } from 'react';
 
 function EditProfile() {
   const navigation = useNavigation();
@@ -43,23 +44,26 @@ const [newHeight, setNewHeight] = useState(initialHeight.toString());
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>이름</Text>
+      <Text style={styles.label}>이름 *</Text>
       <TextInput
         style={styles.input}
         value={newName}
+        placeholder="이름을 입력해주세요."
         onChangeText={text => setNewName(text)}
       />
-      <Text style={styles.label}>키</Text>
+      <Text style={styles.label}>키<Text style={styles.text}> (cm)</Text>*</Text>
       <TextInput
         style={styles.input}
         value={newHeight}
+        placeholder="키를 입렵해주세요."
         onChangeText={text => setNewHeight(text)}
       />
-      <Text style={styles.label}>몸무게</Text>
+      <Text style={styles.label}>몸무게<Text style={styles.text}> (kg)</Text> *</Text>
       <TextInput
         style={styles.input}
         value={newWeight}
-        onChangeText={text => setNewWeight(text)}
+        placeholder="몸무게를 입력해주세요."
+        onChangeText={text => setNewHeight(text)}
       />
       <TouchableOpacity style={styles.button} onPress={handleSave}>
         <Text style={styles.buttonText}>저장</Text>
@@ -71,7 +75,9 @@ const [newHeight, setNewHeight] = useState(initialHeight.toString());
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingTop: 35,
+    paddingHorizontal: 35,
+    backgroundColor: 'white'
   },
   label: {
     fontSize: 18,
@@ -83,16 +89,41 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
+    marginTop: 5
   },
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: 'black',
     padding: 15,
     borderRadius: 5,
+    marginTop: 15,
+    marginBottom: 20,
     alignItems: 'center',
   },
   buttonText: {
     color: 'white',
     fontSize: 18,
+  },
+  text: {
+    fontSize: 13,
+    color: 'gray'
+  },
+  genderContainer: {
+    flexDirection: 'row',
+    marginBottom: 10
+  },
+  genderPick: {
+    paddingHorizontal: 12,
+    alignItems: "center",
+    borderColor: "#d4d2d2",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingVertical: 7,
+    paddingHorizontal: 72,
+    marginRight: 6,
+    marginVertical: 8
+  },
+  selectedOption: {
+    backgroundColor: '#c3effb'
   },
 });
 

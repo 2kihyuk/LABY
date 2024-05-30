@@ -48,6 +48,54 @@
 
 // export default CategoryComponent;
 
+// import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+// import { useNavigation } from '@react-navigation/native';
+
+// function CategoryComponent({ children, imageUrl }) {
+//     const navigation = useNavigation();
+//     return (
+//         <TouchableOpacity onPress={() => navigation.navigate('Category', { category: children })}>
+//             <View style={styles.CategoryClickComponent}>
+//             <ImageBackground source={{ uri: imageUrl }} style={styles.imageBackground}>
+//                 <Text style={styles.text}>
+//                     {children}
+//                 </Text>
+//             </ImageBackground>
+//             </View>
+//         </TouchableOpacity>
+//     )
+// }
+
+// const styles = StyleSheet.create({
+//     CategoryClickComponent: {
+//         width: 105,
+//         height: 105,
+//         backgroundColor: '#e3e2e2',
+//         paddingVertical: 5,
+//         borderRadius: 8,
+//         marginVertical: 5,
+//         alignItems: 'center',
+//         alignContent: 'center',
+//         justifyContent: 'center',
+//     },
+//     imageBackground: {
+//         width: '100%',
+//         height: '100%',
+//         resizeMode: 'cover',
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//     },
+//     text: {
+//         color: 'white',
+//         fontWeight: 'bold',
+//         fontSize: 16,
+//         textAlign: 'center',
+//         paddingHorizontal: 10,
+//         paddingVertical: 5,
+//     },
+// })
+
+// export default CategoryComponent;
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -56,22 +104,23 @@ function CategoryComponent({ children, imageUrl }) {
     return (
         <TouchableOpacity onPress={() => navigation.navigate('Category', { category: children })}>
             <View style={styles.CategoryClickComponent}>
-            <ImageBackground source={{ uri: imageUrl }} style={styles.imageBackground}>
-                <Text style={styles.text}>
-                    {children}
-                </Text>
-            </ImageBackground>
+                <ImageBackground source={{ uri: imageUrl }} style={styles.imageBackground}>
+                </ImageBackground>
             </View>
+            <Text style={styles.text}>
+                {children}
+            </Text>
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
     CategoryClickComponent: {
-        width: 105,
-        height: 105,
+        width: 70,
+        height: 70,
         backgroundColor: '#e3e2e2',
         paddingVertical: 5,
+        marginHorizontal: 2,
         borderRadius: 8,
         marginVertical: 5,
         alignItems: 'center',
@@ -86,9 +135,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     text: {
-        color: 'white',
+        color: 'gray',
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 13,
         textAlign: 'center',
         paddingHorizontal: 10,
         paddingVertical: 5,

@@ -41,6 +41,53 @@
 
 // export default SeasonComponent;
 
+// import React from "react";
+// import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
+// import { useNavigation } from '@react-navigation/native';
+
+// function SeasonComponent({ children, imageUrl }) {
+//     const navigation = useNavigation();
+
+//     return (
+//         <TouchableOpacity onPress={() => navigation.navigate('CategorySeason', { season: children })}>
+//             <View style={styles.container}>
+//                 <ImageBackground source={{ uri: imageUrl }} style={styles.imageBackground}>
+//                     <Text style={styles.text}>
+//                         {children}
+//                     </Text>
+//                 </ImageBackground>
+//             </View>
+//         </TouchableOpacity >
+//     )
+// }
+
+// const styles = StyleSheet.create({
+//     container: {
+//         width: 162,
+//         height: 100,
+//         borderRadius: 8,
+//         overflow: 'hidden'
+//     },
+//     imageBackground: {
+//         width: '100%',
+//         height: '100%',
+//         resizeMode: 'cover',
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         opacity: 0.6,
+//     },
+//     text: {
+//         color: "#000000",
+//         fontWeight: 'bold',
+//         fontSize: 18,
+//         textAlign: 'center',
+//         paddingHorizontal: 10,
+//         paddingVertical: 5
+//     },
+// });
+
+// export default SeasonComponent;
+
 import React from "react";
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -51,11 +98,11 @@ function SeasonComponent({ children, imageUrl }) {
     return (
         <TouchableOpacity onPress={() => navigation.navigate('CategorySeason', { season: children })}>
             <View style={styles.container}>
-                <ImageBackground source={{ uri: imageUrl }} style={styles.imageBackground}>
+                <View style={styles.CategoryClickComponent}>
                     <Text style={styles.text}>
                         {children}
                     </Text>
-                </ImageBackground>
+                </View>
             </View>
         </TouchableOpacity >
     )
@@ -63,26 +110,30 @@ function SeasonComponent({ children, imageUrl }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: 162,
-        height: 100,
+        width: 80,
+        height: 40,
         borderRadius: 8,
-        overflow: 'hidden'
     },
-    imageBackground: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-        justifyContent: 'center',
+    CategoryClickComponent: {
+        width: 70,
+        height: 70,
+        backgroundColor: '#e3e2e2',
+        paddingVertical: 5,
+        marginHorizontal: 2,
+        borderRadius: 8,
+        marginVertical: 5,
         alignItems: 'center',
-        opacity: 0.6,
+        alignContent: 'center',
+        justifyContent: 'center',
     },
     text: {
-        color: "#000000",
+        color: 'gray',
         fontWeight: 'bold',
-        fontSize: 18,
+        fontSize: 13,
         textAlign: 'center',
+        marginTop: 5,
         paddingHorizontal: 10,
-        paddingVertical: 5
+        paddingVertical: 5,
     },
 });
 

@@ -8,7 +8,7 @@ function ImageClickable({ postUrl ,postInfo }) {
 
   const handleImageClick = () => {
     
-    navigation.navigate('Post',{creatorInfo : postInfo});
+    navigation.navigate('Post', {creatorInfo : postInfo});
   };
 
   return (
@@ -23,3 +23,5 @@ function ImageClickable({ postUrl ,postInfo }) {
 }
 
 export default ImageClickable;
+
+
